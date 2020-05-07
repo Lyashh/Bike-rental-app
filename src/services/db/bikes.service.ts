@@ -27,7 +27,9 @@ export default class CartService extends MainDatabaseService {
 
   public findById(id: number) {
     return this.knex("bikes")
-      .where("id", id)
+      .select("bikes.id", "bikes.title", "rent.id as rent_id")
+      .leftJoin("rent", "rent.bike_id", "bikes.id")
+      .where("bikes.id", id)
       .then((data) => data)
       .catch((e) => e);
   }
@@ -46,5 +48,28 @@ export default class CartService extends MainDatabaseService {
       .where("inRent", !available)
       .then((res) => res)
       .catch((e) => e);
+  }
+
+  public InRent() {
+    return this.knex("rent")
+      .select("bikes.id", "bikes.title")
+      .leftJoin("bikes", "rent.bike_id", "bikes.id")
+      .then((res) => res)
+      .catch((err) => err);
+  }
+
+  public available() {
+    return this.knex("bikes")
+      .select("bikes.id", "bikes.title", "bikes.price", "rent.sum")
+      .rightJoin("rent", "rent.bike_id", "!=", "bikes.id")
+      .then((res) => res)
+      .catch((err) => err);
+  }
+
+  public checkInRent(id: number) {
+    return this.knex("rent")
+      .where("bike_id", id)
+      .then((res) => res)
+      .catch((err) => err);
   }
 }

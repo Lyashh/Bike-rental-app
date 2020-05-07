@@ -29,8 +29,8 @@ export default class BikeRouter {
       this.bikeController.delete()
     );
 
-    this.router.get("/available", this.bikeController.getByAvailable(true));
-    this.router.get("/inRent", this.bikeController.getByAvailable(false));
+    this.router.get("/available", this.bikeController.byAvailable());
+    this.router.get("/inRent", this.bikeController.byInRent());
 
     return this.router;
   }

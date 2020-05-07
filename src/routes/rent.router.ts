@@ -19,6 +19,8 @@ export default class BikeRouter {
       this.rentMiddleware.createNewRent(),
       this.rentContoller.create()
     );
+
+    this.router.get("/", this.rentContoller.getAll());
     return this.router;
   }
 }

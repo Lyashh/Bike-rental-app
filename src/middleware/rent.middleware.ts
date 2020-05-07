@@ -15,8 +15,7 @@ export default class RentMiddleware {
           .findById(req.body.id)
           .then((data) => {
             if (data.length > 0) {
-              console.log(data);
-              if (data[0].inRent) {
+              if (data[0].rent_id) {
                 return res.status(422).json({
                   message: "validation error",
                   detail: `bike with id=${req.body.id} already in rent`,

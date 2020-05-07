@@ -55,10 +55,21 @@ export default class BikeControoller {
     };
   }
 
-  public getByAvailable(available: boolean) {
+  public byAvailable() {
     return (req: Request, res: Response): Promise<Response> => {
       return this.bikeService
-        .whereAvailable(available)
+        .available()
+        .then((data) => {
+          return res.json(data);
+        })
+        .catch((err) => res.status(500).json({ err }));
+    };
+  }
+
+  public byInRent() {
+    return (req: Request, res: Response): Promise<Response> => {
+      return this.bikeService
+        .InRent()
         .then((data) => {
           return res.json(data);
         })

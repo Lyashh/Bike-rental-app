@@ -28,6 +28,10 @@ export default class RootRouter {
       this.bikeMiddleware.validateBikeIdExist(),
       this.bikeController.delete()
     );
+
+    this.router.get("/available", this.bikeController.getByAvailable(true));
+    this.router.get("/inRent", this.bikeController.getByAvailable(false));
+
     return this.router;
   }
 }

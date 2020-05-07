@@ -9,8 +9,10 @@ export async function up(knex: Knex): Promise<any> {
 
     .createTable("rent", (table) => {
       table.increments("id").primary();
-      table.float("sum").notNullable();
-      table.float("rentTime").notNullable();
+      table.float("sum");
+      table.float("rentTime");
+      table.timestamp("created_at").defaultTo(knex.fn.now());
+      table.timestamp("end_at").defaultTo(null);
     })
 
     .createTable("bikes", (table) => {

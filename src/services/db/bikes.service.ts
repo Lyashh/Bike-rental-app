@@ -39,4 +39,12 @@ export default class CartService extends MainDatabaseService {
       .then((data) => data)
       .catch((e) => e);
   }
+
+  public whereAvailable(available: boolean) {
+    return this.knex("bikes")
+      .select("*")
+      .where("inRent", !available)
+      .then((res) => res)
+      .catch((e) => e);
+  }
 }

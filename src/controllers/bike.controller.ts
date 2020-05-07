@@ -41,7 +41,7 @@ export default class BikeControoller {
   }
 
   public delete() {
-    return (req: Request, res: Response) => {
+    return (req: Request, res: Response): Promise<Response> => {
       return this.bikeService
         .deleteById(req.body.id)
         .then((data) => {
@@ -50,6 +50,17 @@ export default class BikeControoller {
           } else {
             return res.status(500).json({ err: data });
           }
+        })
+        .catch((err) => res.status(500).json({ err }));
+    };
+  }
+
+  public getByAvailable(available: boolean) {
+    return (req: Request, res: Response): Promise<Response> => {
+      return this.bikeService
+        .whereAvailable(available)
+        .then((data) => {
+          return res.json(data);
         })
         .catch((err) => res.status(500).json({ err }));
     };

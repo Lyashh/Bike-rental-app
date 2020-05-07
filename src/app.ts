@@ -41,7 +41,7 @@ class App {
     this.expressApp.use(express.static(__dirname + "/static"));
 
     this.expressApp.set("port", process.env.PORT || 4000);
-    this.expressApp.use(`/api/${process.env}/`, this.router.routes);
+    this.expressApp.use("/api/", this.router.routes);
 
     // 404
     this.expressApp.use((req, res, next) => {

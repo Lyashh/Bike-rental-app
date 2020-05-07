@@ -2,11 +2,6 @@ import * as Knex from "knex";
 
 export async function up(knex: Knex): Promise<any> {
   return knex.schema
-    .createTable("status", (table) => {
-      table.increments("id").primary();
-      table.string("title").notNullable();
-    })
-
     .createTable("category", (table) => {
       table.increments("id").primary();
       table.string("title").notNullable();
@@ -22,14 +17,7 @@ export async function up(knex: Knex): Promise<any> {
       table.increments("id").primary();
       table.string("title").notNullable();
       table.float("price").notNullable();
-      table
-        .bigInteger("status_id")
-        .unsigned()
-        .notNullable()
-        .references("id")
-        .inTable("status")
-        .onDelete("CASCADE")
-        .index();
+      table.boolean("inRent").notNullable();
       table
         .bigInteger("category_id")
         .unsigned()
@@ -49,5 +37,9 @@ export async function up(knex: Knex): Promise<any> {
 }
 
 export async function down(knex: Knex): Promise<any> {
-  return knex.schema.dropTable("bikes");
+  return knex.schema
+    .dropTable("bikes")
+    .dropTable("rent")
+    .dropTable("category")
+    .dropTable("status");
 }

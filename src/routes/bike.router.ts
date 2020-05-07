@@ -2,7 +2,7 @@ import { Router as ExpressRouter } from "express";
 import BikeMiddleware from "../middleware/bikes.middleware";
 import BikeContoller from "../controllers/bike.controller";
 
-export default class RootRouter {
+export default class BikeRouter {
   private router: ExpressRouter;
   private bikeController: BikeContoller;
   private bikeMiddleware: BikeMiddleware;

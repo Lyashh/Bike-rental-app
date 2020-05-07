@@ -10,8 +10,7 @@ export async function up(knex: Knex): Promise<any> {
     .createTable("rent", (table) => {
       table.increments("id").primary();
       table.float("sum");
-      table.float("rentTime");
-      table.timestamp("created_at").defaultTo(knex.fn.now());
+      table.timestamp("created_at").defaultTo(knex.fn.now()).notNullable();
       table.timestamp("end_at").defaultTo(null);
     })
 
@@ -39,9 +38,5 @@ export async function up(knex: Knex): Promise<any> {
 }
 
 export async function down(knex: Knex): Promise<any> {
-  return knex.schema
-    .dropTable("bikes")
-    .dropTable("rent")
-    .dropTable("category")
-    .dropTable("status");
+  return knex.schema.dropTable("bikes").dropTable("rent").dropTable("category");
 }

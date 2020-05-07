@@ -19,7 +19,7 @@ export default class RoleMiddleware {
           if (data.length > 0) {
             return next();
           } else {
-            return res.status(422).json({
+            return res.status(404).json({
               message: "validation error",
               detail: `category with id=${req.body.category_id} does not exist`,
             });
@@ -40,7 +40,7 @@ export default class RoleMiddleware {
             if (data.length > 0) {
               return next();
             } else {
-              return res.status(422).json({
+              return res.status(404).json({
                 message: "validation error",
                 detail: `bike with id=${req.body.id} does not exist`,
               });
@@ -50,9 +50,9 @@ export default class RoleMiddleware {
             res.status(500).json({ err });
           });
       } else {
-        return res.status(422).json({
+        return res.status(400).json({
           message: "validation error",
-          detail: `request must contain "id" and be number`,
+          detail: `request must contain "id": number`,
         });
       }
     };
@@ -62,7 +62,7 @@ export default class RoleMiddleware {
     return async (req: Request, res: Response, next: NextFunction) => {
       const validResult = await Validation.newBike(req.body);
       if (validResult.error) {
-        return res.status(422).json({
+        return res.status(400).json({
           detail: validResult.error.details[0],
           message: "validation fails",
         });

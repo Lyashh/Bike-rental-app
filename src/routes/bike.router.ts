@@ -22,6 +22,12 @@ export default class RootRouter {
       this.bikeMiddleware.validateCategoryExist(),
       this.bikeController.create()
     );
+
+    this.router.delete(
+      "/",
+      this.bikeMiddleware.validateBikeIdExist(),
+      this.bikeController.delete()
+    );
     return this.router;
   }
 }

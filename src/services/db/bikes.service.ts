@@ -24,4 +24,19 @@ export default class CartService extends MainDatabaseService {
       .then((res) => res)
       .catch((e) => e);
   }
+
+  public findById(id: number) {
+    return this.knex("bikes")
+      .where("id", id)
+      .then((data) => data)
+      .catch((e) => e);
+  }
+
+  public deleteById(id: number) {
+    return this.knex("bikes")
+      .where("id", id)
+      .del()
+      .then((data) => data)
+      .catch((e) => e);
+  }
 }

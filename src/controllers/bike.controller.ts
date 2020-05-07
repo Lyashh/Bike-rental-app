@@ -6,21 +6,22 @@ export default class BikeControoller {
   constructor() {
     this.bikeService = new BikesService();
   }
+
   public getAll() {
-    return (req: Request, res: Response) => {
+    return (req: Request, res: Response): Promise<Response> => {
       return this.bikeService
         .selectAll()
         .then((bikes) => {
-          res.json(bikes);
+          return res.json(bikes);
         })
         .catch((err) => {
-          res.status(500).json({ err });
+          return res.status(500).json({ err });
         });
     };
   }
 
   public create() {
-    return (req: Request, res: Response) => {
+    return (req: Request, res: Response): Promise<Response> => {
       const newBike: Bike = {
         title: req.body.title,
         category_id: req.body.category_id,
@@ -28,14 +29,29 @@ export default class BikeControoller {
         inRent: false,
         rent_id: null,
       };
-      this.bikeService
+      return this.bikeService
         .insert(newBike)
         .then((newBike) => {
-          res.json(newBike[0]);
+          return res.json(newBike[0]);
         })
         .catch((err) => {
-          res.status(500).json({ err });
+          return res.status(500).json({ err });
         });
+    };
+  }
+
+  public delete() {
+    return (req: Request, res: Response) => {
+      return this.bikeService
+        .deleteById(req.body.id)
+        .then((data) => {
+          if (data === 1) {
+            return res.json({ message: "success delete", success: true });
+          } else {
+            return res.status(500).json({ err: data });
+          }
+        })
+        .catch((err) => res.status(500).json({ err }));
     };
   }
 }

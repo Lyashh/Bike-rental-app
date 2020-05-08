@@ -1,8 +1,39 @@
 import React from "react";
+import { getAwailableBikes, getRentBikes } from "../func/requests";
 import { Row, Container, Col } from "react-bootstrap";
 import CreateRent from "./CreateRent";
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      available: [],
+      rent: {},
+    };
+  }
+  componentDidMount() {}
+
+  updateData() {
+    this.getAwailable();
+    this.getRent();
+  }
+
+  getAwailable() {
+    getAwailableBikes
+      .then((data) => {
+        this.setState({ available: data });
+      })
+      .catch((e) => console.log({ error: e }));
+  }
+
+  getRent() {
+    getRentBikes
+      .then((data) => {
+        this.setState({ available: data });
+      })
+      .catch((e) => console.log({ error: e }));
+  }
+
   render() {
     return (
       <Container>

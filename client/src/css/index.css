@@ -4,7 +4,7 @@ body {
 }
 
 .rent-wrap {
-  height: 150px;
+  min-height: 150px;
   background-color: #e8e9ed;
   padding: 40px 50px 20px 50px;
 }
@@ -18,7 +18,4 @@ body {
   margin-top: 6px;
   background-color: #1fba99 !important;
   border-color: #1fba99 !important;
-}
-
-.rent-short-input {
 }

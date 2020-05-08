@@ -36,7 +36,7 @@ class App {
     this.expressApp.use(bodyParser.json());
     this.expressApp.use(bodyParser.urlencoded({ extended: true }));
     this.expressApp.use(
-      cors({ credentials: true, origin: process.env.CORS_ORIGIN })
+      cors({ origin: process.env.CORS_ORIGIN || "http://localhost:3000" })
     );
     this.expressApp.use(express.static(__dirname + "/static"));
 

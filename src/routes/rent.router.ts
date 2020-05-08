@@ -20,12 +20,13 @@ export default class BikeRouter {
       this.rentContoller.create()
     );
 
-    this.router.get("/", this.rentContoller.getAll());
     this.router.delete(
       "/",
       this.rentMiddleware.deleteRent(),
       this.rentContoller.delete()
     );
+
+    this.router.get("/", this.rentContoller.getUserRent());
     return this.router;
   }
 }

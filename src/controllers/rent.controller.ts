@@ -10,17 +10,11 @@ export default class RentController {
   public create() {
     return (req: Request, res: Response) => {
       return this.rentService
-        .insertOne(req.body.id)
+        .insertOne(req.body.id, 1) //user rent id=1
         .then((data) => {
           return res.json(data);
         })
         .catch((err) => res.status(500).json({ err }));
-    };
-  }
-
-  public getAll() {
-    return (req: Request, res: Response) => {
-      return res.json(1);
     };
   }
 
@@ -30,6 +24,17 @@ export default class RentController {
         .deleteOne(req.body.id)
         .then((data) => {
           return res.json(data);
+        })
+        .catch((err) => res.status(500).json({ err }));
+    };
+  }
+
+  public getUserRent() {
+    return (req: Request, res: Response) => {
+      this.rentService
+        .getById(1) //user rent id=1
+        .then((rent) => {
+          return res.json(rent);
         })
         .catch((err) => res.status(500).json({ err }));
     };

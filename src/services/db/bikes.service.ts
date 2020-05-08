@@ -27,10 +27,17 @@ export default class CartService extends MainDatabaseService {
   }
 
   public InRent() {
-    return this.knex("bikesToRents")
-      .select("bikes.id", "bikes.title")
-      .leftJoin("bikes", "bikesToRents.bike_id", "bikes.id")
-      .whereNull("bikesToRents.end_at");
+    return this.knex("bikesToRents AS br")
+      .select(
+        "b.id",
+        "b.title",
+        "b.price",
+        "br.id AS bikesToRents_id",
+        "c.title AS category"
+      )
+      .leftJoin("bikes AS b", "br.bike_id", "b.id")
+      .leftJoin("category AS c", "c.id", "b.category_id")
+      .whereNull("br.end_at");
   }
 
   public oneInRent(bikeId: number): Promise<boolean> {
@@ -62,10 +69,11 @@ export default class CartService extends MainDatabaseService {
   }
 
   public available() {
-    return this.knex("bikes")
-      .select("bikes.id", "bikes.title", "bikes.price")
-      .leftJoin("bikesToRents", "bikesToRents.bike_id", "bikes.id")
-      .whereNull("bikesToRents.id")
+    return this.knex("bikes AS b")
+      .select("b.id", "b.title", "b.price", "c.title AS category")
+      .leftJoin("bikesToRents AS br", "br.bike_id", "b.id")
+      .leftJoin("category AS c", "c.id", "b.category_id")
+      .whereNull("br.id")
       .orderBy("id");
   }
 }

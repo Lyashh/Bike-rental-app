@@ -35,11 +35,11 @@ export default class RentService extends MainDatabaseService {
 
   public updareRent() {
     return (
-      this.knex("bikesToRents")
-        .select("bikes.price", this.knex.raw(this.timeDiffQuery))
-        .leftJoin("bikes", "bikes.id", "bikesToRents.bike_id")
-        .where("bikesToRents.rent_id", 1)
-        .whereNull("bikesToRents.end_at")
+      this.knex("bikesToRents AS br")
+        .select("b.price", this.knex.raw(this.timeDiffQuery))
+        .leftJoin("bikes AS b", "b.id", "br.bike_id")
+        .where("br.rent_id", 1)
+        .whereNull("br.end_at")
         //calculate total sum and doble_check
         .then((rentBikes) => {
           const sum = this.calculateSum(rentBikes);
@@ -76,9 +76,11 @@ export default class RentService extends MainDatabaseService {
         "br.id AS bikesToRents_id",
         "b.price",
         "br.created_at",
+        "c.title AS category",
         this.knex.raw(this.timeDiffQuery)
       )
       .leftJoin("bikes AS b", "b.id", "br.bike_id")
+      .leftJoin("category AS c", "c.id", "b.category_id")
       .where("br.rent_id", rentIt)
       .whereNull("br.end_at")
 

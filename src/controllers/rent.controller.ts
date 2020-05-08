@@ -20,12 +20,7 @@ export default class RentController {
 
   public getAll() {
     return (req: Request, res: Response) => {
-      return this.rentService
-        .selectAll()
-        .then((data) => {
-          return res.json(data);
-        })
-        .catch((err) => res.status(500).json({ err }));
+      return res.json(1);
     };
   }
 

@@ -2,90 +2,67 @@ import MainDatabaseService from "./main.service";
 
 export default class RentService extends MainDatabaseService {
   public insertOne(bikeId: number) {
-    return 
-    /*this.knex("bikes")
-      .where("id", bikeId)
-      .first()
-      .then((bike) => {
-        return this.knex("rent")
-          .insert({
-            created_at: this.knex.fn.now(),
-          })
-          .returning("*");
-      })
-      .then((rent) => {
-        return this.knex("bikesToRents")
-          .insert({ bike_id: bikeId, rent_id: rent[0].id })
-          .returning("*");
-      })
-      .then((res) => res)
-      .catch((e) => e);*/
-  }
-
-  public deleteOne(bikeId: number) {
+    //create new Item in bikesToRents
     return this.knex("bikesToRents")
-      .where("bike_id", bikeId)
-      .first()
-      .del()
-      .returning("*")
-      .then((del) => {
-        console.log({ del });
-        console.log();
-
-        return this.knex.raw(
-          "SELECT (extract(EPOCH  from (now() - created_at::timestamp))/3600) AS diff, * FROM rent WHERE id=?",
-          [del[0].rent_id]
-        );
-      })
-      .then((rent) => {
-        let updateData: {
-          end_at: string | any;
-          double_price: boolean;
-          sum: number;
-        } = {
-          end_at: this.knex.fn.now(),
-          double_price: rent.rows[0].double_price,
-          sum: rent.rows[0].sum,
-        };
-        if (rent.rows[0].sum > 20 && rent.rows[0].double_price === false) {
-          (updateData.double_price = true), (updateData.sum *= 2);
-        }
-        return this.knex("rent")
-          .where("id", rent.rows[0].id)
-          .update(updateData)
-          .returning("*");
-      })
-      .then((updateRent) => updateRent)
-      .catch((e) => e);
+      .insert({ bike_id: bikeId, rent_id: 1 })
+      .then((newItem) => {
+        return this.updareRent();
+      });
   }
 
-  private setDoublePrice(ids: Array<number>): void {
-    this.knex("rent")
-      .where("double_price", false)
-      .whereIn("id", ids)
-      .update("double_price", true)
-      .returning("*")
-      .then((res) => res)
-      .catch((err) => console.log(err));
-  }
-
-  public selectAll() {
-    return this.knex
-      .raw(
-        "SELECT (extract(EPOCH  from (now() - created_at::timestamp))/3600) AS diff, * FROM rent"
-      )
+  // bToRntsId = bikesToRents.id
+  public deleteOne(bToRntsId: number) {
+    return this.knex("bikesToRents")
+      .where("id", bToRntsId)
+      .whereNull("end_at")
+      .update({ end_at: this.knex.fn.now() })
       .then((res) => {
-        let rentArr: Array<number> = [];
-        const rent = res.rows.map((el) => {
-          if (!el.double_price && el.diff > 20) {
-            el.sum *= 2;
-            rentArr.push(el.id);
-            return el;
-          }
-          return el;
-        });
-        this.setDoublePrice(rentArr);
-        return rent;
+        return this.updareRent();
+      });
+  }
+
+  public updareRent() {
+    return (
+      this.knex("bikesToRents")
+        .select(
+          "bikes.id AS bikes_id",
+          "bikes.price",
+          "bikesToRents.id AS bikesToRents_id",
+          this.knex.raw(
+            "extract(EPOCH  from (now() - created_at::timestamp))/3600 as diff"
+          )
+        )
+        .leftJoin("bikes", "bikes.id", "bikesToRents.bike_id")
+        .where("bikesToRents.rent_id", 1)
+        .whereNull("bikesToRents.end_at")
+
+        //calculate total sum and doble_check
+        .then((rentBikes) => {
+          const sum = rentBikes
+            .map((el) => el.price)
+            .reduce((prev, current) => prev + current);
+          const double_price = rentBikes.some((el) => el.diff > 20);
+
+          //return updated rend
+          return this.knex("rent")
+            .where("id", 1)
+            .update({ sum, double_price })
+            .returning("*");
+        })
+    );
+  }
+
+  public bToRntsItemExists(bToRntsId: number): Promise<boolean> {
+    return this.knex("bikesToRents")
+      .select("id")
+      .where("id", bToRntsId)
+      .whereNull("end_at")
+      .then((res) => {
+        if (res.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
       })
       .catch((e) => e);
   }

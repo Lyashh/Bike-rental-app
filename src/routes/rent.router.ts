@@ -21,6 +21,11 @@ export default class BikeRouter {
     );
 
     this.router.get("/", this.rentContoller.getAll());
+    this.router.delete(
+      "/",
+      this.rentMiddleware.deleteRent(),
+      this.rentContoller.delete()
+    );
     return this.router;
   }
 }

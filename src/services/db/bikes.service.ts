@@ -61,7 +61,9 @@ export default class CartService extends MainDatabaseService {
   public available() {
     return this.knex("bikes")
       .select("bikes.id", "bikes.title", "bikes.price")
-      .leftOuterJoin("bikesToRents", "bikesToRents.bike_id", "bikes.id")
+      .leftJoin("bikesToRents", "bikesToRents.bike_id", "bikes.id")
+      .whereNull("bikesToRents.id")
+      .orderBy("id")
       .then((res) => res)
       .catch((err) => err);
   }

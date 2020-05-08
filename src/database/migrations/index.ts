@@ -26,6 +26,17 @@ export async function up(knex: Knex): Promise<any> {
       table.boolean("double_price").defaultTo(false).notNullable();
       table.timestamp("created_at").defaultTo(knex.fn.now()).notNullable();
       table.timestamp("end_at").defaultTo(null);
+    })
+
+    .createTable("bikesToRents", (table) => {
+      table
+        .bigInteger("rent_id")
+        .unsigned()
+        .notNullable()
+        .references("id")
+        .inTable("rent")
+        .onDelete("CASCADE")
+        .index();
       table
         .bigInteger("bike_id")
         .unsigned()
@@ -38,5 +49,9 @@ export async function up(knex: Knex): Promise<any> {
 }
 
 export async function down(knex: Knex): Promise<any> {
-  return knex.schema.dropTable("rent").dropTable("bikes").dropTable("category");
+  return knex.schema
+    .dropTable("bikesToRents")
+    .dropTable("rent")
+    .dropTable("bikes")
+    .dropTable("category");
 }

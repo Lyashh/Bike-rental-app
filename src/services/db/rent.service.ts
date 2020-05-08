@@ -2,14 +2,14 @@ import MainDatabaseService from "./main.service";
 
 export default class RentService extends MainDatabaseService {
   public insertOne(bikeId: number) {
-    return this.knex("bikes")
+    return 
+    /*this.knex("bikes")
       .where("id", bikeId)
       .first()
       .then((bike) => {
         return this.knex("rent")
           .insert({
             created_at: this.knex.fn.now(),
-            sum: bike.price,
           })
           .returning("*");
       })
@@ -19,7 +19,7 @@ export default class RentService extends MainDatabaseService {
           .returning("*");
       })
       .then((res) => res)
-      .catch((e) => e);
+      .catch((e) => e);*/
   }
 
   public deleteOne(bikeId: number) {

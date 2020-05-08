@@ -24,8 +24,6 @@ export async function up(knex: Knex): Promise<any> {
       table.increments("id").primary();
       table.float("sum");
       table.boolean("double_price").defaultTo(false).notNullable();
-      table.timestamp("created_at").defaultTo(knex.fn.now()).notNullable();
-      table.timestamp("end_at").defaultTo(null);
     })
 
     .createTable("bikesToRents", (table) => {
@@ -46,6 +44,8 @@ export async function up(knex: Knex): Promise<any> {
         .inTable("bikes")
         .onDelete("CASCADE")
         .index();
+      table.timestamp("created_at").defaultTo(knex.fn.now()).notNullable();
+      table.timestamp("end_at").defaultTo(null);
     });
 }
 

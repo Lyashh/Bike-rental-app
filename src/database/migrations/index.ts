@@ -29,6 +29,7 @@ export async function up(knex: Knex): Promise<any> {
     })
 
     .createTable("bikesToRents", (table) => {
+      table.increments("id").primary();
       table
         .bigInteger("rent_id")
         .unsigned()

@@ -11,7 +11,9 @@ class App extends React.Component {
       rent: {},
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    //this.updateData();
+  }
 
   updateData() {
     this.getAwailable();
@@ -19,7 +21,7 @@ class App extends React.Component {
   }
 
   getAwailable() {
-    getAwailableBikes
+    getAwailableBikes()
       .then((data) => {
         this.setState({ available: data });
       })
@@ -27,7 +29,7 @@ class App extends React.Component {
   }
 
   getRent() {
-    getRentBikes
+    getRentBikes()
       .then((data) => {
         this.setState({ available: data });
       })

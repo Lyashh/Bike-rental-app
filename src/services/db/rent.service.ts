@@ -85,17 +85,25 @@ export default class RentService extends MainDatabaseService {
       .whereNull("br.end_at")
 
       .then((items) => {
-        const sum = this.calculateSum(items);
-        const double_price = items.some((el) => el.diff > 20);
-        tempItems = items;
+        if (items.length > 0) {
+          const sum = this.calculateSum(items);
+          const double_price = items.some((el) => el.diff > 20);
+          tempItems = items;
+          return this.knex("rent")
+            .where("id", rentIt)
+            .first()
+            .update({ sum, double_price })
+            .returning("*");
+        }
         return this.knex("rent")
           .where("id", rentIt)
-          .update({ sum, double_price })
+          .first()
+          .update({ sum: 0 })
           .returning("*");
       })
       .then((rent) => {
         return {
-          rent,
+          rent: rent[0],
           items: tempItems,
         };
       });

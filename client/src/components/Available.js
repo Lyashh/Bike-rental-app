@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 
-class Awailable extends React.Component {
+class Available extends React.Component {
   render() {
     return (
       <Row>
@@ -29,4 +29,4 @@ class Awailable extends React.Component {
   }
 }
 
-export default Awailable;
+export default Available;

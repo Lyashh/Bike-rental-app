@@ -72,6 +72,7 @@ export default class RentService extends MainDatabaseService {
     let tempItems: Array<Object> = [];
     return this.knex("bikesToRents AS br")
       .select(
+        "b.title",
         "b.id AS bike_id",
         "br.id AS bikesToRents_id",
         "b.price",
@@ -85,6 +86,7 @@ export default class RentService extends MainDatabaseService {
       .whereNull("br.end_at")
 
       .then((items) => {
+        //calculate total sum and check double_price
         if (items.length > 0) {
           const sum = this.calculateSum(items);
           const double_price = items.some((el) => el.diff > 20);
@@ -95,6 +97,7 @@ export default class RentService extends MainDatabaseService {
             .update({ sum, double_price })
             .returning("*");
         }
+        //if rent dont have items set sum = 0
         return this.knex("rent")
           .where("id", rentIt)
           .first()

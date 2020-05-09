@@ -12,7 +12,7 @@ class App extends React.Component {
     };
   }
   componentDidMount() {
-    //this.updateData();
+    this.updateData();
   }
 
   updateData() {
@@ -31,7 +31,7 @@ class App extends React.Component {
   getRent() {
     getRentBikes()
       .then((data) => {
-        this.setState({ available: data });
+        this.setState({ rent: data });
       })
       .catch((e) => console.log({ error: e }));
   }
@@ -45,7 +45,7 @@ class App extends React.Component {
           </Col>
           <Col md={12}>
             <h3>Create new rent</h3>
-            <CreateRent />
+            <CreateRent items={this.state.available} />
           </Col>
         </Row>
       </Container>

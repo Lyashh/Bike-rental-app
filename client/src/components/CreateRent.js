@@ -128,7 +128,7 @@ class CreateRent extends React.Component {
     } else {
       content = null;
     }
-    return <div className="rent-wrap">{content}</div>;
+    return <div>{content}</div>;
   }
 }
 

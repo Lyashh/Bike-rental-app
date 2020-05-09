@@ -2,6 +2,7 @@ import React from "react";
 import { getAwailableBikes, getRentBikes } from "../func/requests";
 import { Row, Container, Col } from "react-bootstrap";
 import CreateRent from "./CreateRent";
+import Awailable from "./Awailable";
 
 class App extends React.Component {
   constructor(props) {
@@ -46,6 +47,18 @@ class App extends React.Component {
           <Col md={12}>
             <h3>Create new rent</h3>
             <CreateRent items={this.state.available} />
+          </Col>
+
+          {/* <Col md={12}>
+            <h3>Your rent (Total: $12.89)</h3>
+            <Awailable items={this.state.available} />
+    </Col>*/}
+
+          <Col md={12}>
+            <h3>Awailable bicycles ({this.state.available.length})</h3>
+            {this.state.available.length > 0 ? (
+              <Awailable items={this.state.available} />
+            ) : null}
           </Col>
         </Row>
       </Container>

@@ -32,7 +32,7 @@ export default class RentController {
   public getUserRent() {
     return (req: Request, res: Response) => {
       this.rentService
-        .getById(1) //user rent id=1
+        .updareRentAndGet(1) //user rent id=1
         .then((rent) => {
           return res.json(rent);
         })

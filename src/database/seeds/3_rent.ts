@@ -6,6 +6,6 @@ export async function seed(knex: Knex): Promise<any> {
     .del()
     .then(() => {
       // Inserts seed entries
-      return knex("rent").insert([{ id: 1, sum: 0, double_price: false }]);
+      return knex("rent").insert([{ id: 1, sum: 0 }]);
     });
 }

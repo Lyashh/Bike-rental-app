@@ -36,8 +36,7 @@ export default class CartService extends MainDatabaseService {
         "c.title AS category"
       )
       .leftJoin("bikes AS b", "br.bike_id", "b.id")
-      .leftJoin("category AS c", "c.id", "b.category_id")
-      .whereNull("br.end_at");
+      .leftJoin("category AS c", "c.id", "b.category_id");
   }
 
   public oneInRent(bikeId: number): Promise<boolean> {
@@ -45,7 +44,6 @@ export default class CartService extends MainDatabaseService {
       .select("bikes.id", "bikes.title")
       .leftJoin("bikes", "bikesToRents.bike_id", "bikes.id")
       .where("bikes.id", bikeId)
-      .whereNull("bikesToRents.end_at")
       .then((res) => {
         if (res.length > 0) {
           return true;
@@ -58,21 +56,15 @@ export default class CartService extends MainDatabaseService {
 
   public findById(id: number) {
     return this.knex("bikes")
-      .select(
-        "bikes.id",
-        "bikes.title",
-        "bikesToRents.id as bikesToRents_id",
-        "bikesToRents.end_at as end_at"
-      )
+      .select("bikes.id", "bikes.title", "bikesToRents.id as bikesToRents_id")
       .leftJoin("bikesToRents", "bikesToRents.bike_id", "bikes.id")
       .where("bikes.id", id);
   }
 
   public available() {
     return this.knex("bikes AS b")
-      .select("b.id", "b.title", "b.price", "c.title AS category")
+      .select("b.id", "b.title", "b.price", "br.rent_id")
       .leftJoin("bikesToRents AS br", "br.bike_id", "b.id")
-      .leftJoin("category AS c", "c.id", "b.category_id")
       .whereNull("br.id")
       .orderBy("id");
   }

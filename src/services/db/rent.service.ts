@@ -12,7 +12,7 @@ export default class RentService extends MainDatabaseService {
     return this.knex("bikesToRents")
       .insert({ bike_id: bikeId, rent_id })
       .then((newItem) => {
-        return this.updareRent(rent_id);
+        return this.updareRentAndGet(rent_id);
       });
   }
 
@@ -20,10 +20,10 @@ export default class RentService extends MainDatabaseService {
   public deleteOne(bToRntsId: number, rent_id: number) {
     return this.knex("bikesToRents")
       .where("id", bToRntsId)
-      .whereNull("end_at")
-      .update({ end_at: this.knex.fn.now() })
+      .andWhere("rent_id", rent_id)
+      .del()
       .then((res) => {
-        return this.updareRent(rent_id);
+        return this.updareRentAndGet(rent_id);
       });
   }
 
@@ -33,53 +33,7 @@ export default class RentService extends MainDatabaseService {
       .reduce((prev, current) => prev + current);
   }
 
-  public updareRent(rent_id) {
-    let tempItems: Array<Object> = [];
-    return this.knex("bikesToRents AS br")
-      .select("b.price", this.knex.raw(this.timeDiffQuery))
-      .leftJoin("bikes AS b", "b.id", "br.bike_id")
-      .where("br.rent_id", rent_id)
-      .whereNull("br.end_at")
-      .then((items) => {
-        if (items.length > 0) {
-          const sum = this.calculateSum(items);
-          const double_price = items.some((el) => el.diff > 20);
-          tempItems = items;
-          return this.knex("rent")
-            .where("id", 1)
-            .first()
-            .update({ sum, double_price })
-            .returning("*");
-        }
-        return this.knex("rent")
-          .where("id", 1)
-          .first()
-          .update({ sum: 0 })
-          .returning("*");
-      })
-      .then((rent) => {
-        return {
-          rent: rent[0],
-          items: tempItems,
-        };
-      });
-  }
-
-  public bToRntsItemExists(bToRntsId: number): Promise<boolean> {
-    return this.knex("bikesToRents")
-      .select("id")
-      .where("id", bToRntsId)
-      .whereNull("end_at")
-      .then((res) => {
-        if (res.length > 0) {
-          return true;
-        }
-        return false;
-      })
-      .catch((e) => e);
-  }
-
-  public getById(rentIt: number) {
+  public updareRentAndGet(rentIt: number) {
     let tempItems: Array<Object> = [];
     return (
       this.knex("bikesToRents AS br")
@@ -95,26 +49,24 @@ export default class RentService extends MainDatabaseService {
         .leftJoin("bikes AS b", "b.id", "br.bike_id")
         .leftJoin("category AS c", "c.id", "b.category_id")
         .where("br.rent_id", rentIt)
-        .whereNull("br.end_at")
 
         //from adn update rent
         .then((items) => {
           //calculate total sum and check double_price
+          let sum = 0;
           if (items.length > 0) {
-            const sum = this.calculateSum(items);
+            sum = this.calculateSum(items);
             const double_price = items.some((el) => el.diff > 20);
-            tempItems = items;
-            return this.knex("rent")
-              .where("id", rentIt)
-              .first()
-              .update({ sum, double_price })
-              .returning("*");
+            if (double_price) {
+              sum *= 2;
+            }
           }
-          //if rent dont have items set sum = 0
+
+          tempItems = items;
           return this.knex("rent")
             .where("id", rentIt)
             .first()
-            .update({ sum: 0 })
+            .update({ sum })
             .returning("*");
         })
         .then((rent) => {
@@ -124,5 +76,18 @@ export default class RentService extends MainDatabaseService {
           };
         })
     );
+  }
+
+  public bToRntsItemExists(bToRntsId: number): Promise<boolean> {
+    return this.knex("bikesToRents")
+      .select("id")
+      .where("id", bToRntsId)
+      .then((res) => {
+        if (res.length > 0) {
+          return true;
+        }
+        return false;
+      })
+      .catch((e) => e);
   }
 }

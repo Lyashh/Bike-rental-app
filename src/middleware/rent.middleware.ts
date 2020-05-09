@@ -47,8 +47,6 @@ export default class RentMiddleware {
 
   public deleteRent() {
     return (req: Request, res: Response, next: NextFunction) => {
-      console.log(typeof req.body.id);
-
       if (req.body.id && typeof req.body.id == "number") {
         return this.rentService.bToRntsItemExists(req.body.id).then((data) => {
           if (data) {
@@ -56,7 +54,7 @@ export default class RentMiddleware {
           } else {
             return res.status(422).json({
               message: "validation error",
-              detail: `rent item  with id=${req.body.id} not in exist`,
+              detail: `rent item  with id=${req.body.id} not exist`,
             });
           }
         });

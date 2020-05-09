@@ -21,7 +21,7 @@ export default class RentController {
   public delete() {
     return (req: Request, res: Response) => {
       return this.rentService
-        .deleteOne(req.body.id)
+        .deleteOne(req.body.id, 1) //user rent id=1
         .then((data) => {
           return res.json(data);
         })

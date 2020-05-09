@@ -3,6 +3,7 @@ import {
   getAwailableBikes,
   getRentBikes,
   deleteBikeRent,
+  rentBike,
 } from "../func/requests";
 import { Row, Container, Col } from "react-bootstrap";
 import CreateRent from "./CreateRent";
@@ -73,7 +74,10 @@ class App extends React.Component {
           <Col md={12}>
             <h3>Create new rent</h3>
             {this.state.available.length > 0 ? (
-              <CreateRent items={this.state.available} />
+              <CreateRent
+                items={this.state.available}
+                updateAll={this.updateData.bind(this)}
+              />
             ) : null}
           </Col>
 

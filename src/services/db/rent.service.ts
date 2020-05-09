@@ -7,23 +7,22 @@ export default class RentService extends MainDatabaseService {
     this.timeDiffQuery =
       "extract(EPOCH  from (now() - created_at::timestamp))/3600 as diff"; //for bikesToRents table
   }
-  public insertOne(bikeId: number, rent_id: number) {
+  public insertOne(bikeId: number) {
     //create new Item in bikesToRents
     return this.knex("bikesToRents")
-      .insert({ bike_id: bikeId, rent_id })
+      .insert({ bike_id: bikeId })
       .then((newItem) => {
-        return this.updareRentAndGet(rent_id);
+        return this.updareRentAndGet();
       });
   }
 
   // bToRntsId = bikesToRents.id
-  public deleteOne(bToRntsId: number, rent_id: number) {
+  public deleteOne(bToRntsId: number) {
     return this.knex("bikesToRents")
       .where("id", bToRntsId)
-      .andWhere("rent_id", rent_id)
       .del()
       .then((res) => {
-        return this.updareRentAndGet(rent_id);
+        return this.updareRentAndGet();
       });
   }
 
@@ -33,8 +32,7 @@ export default class RentService extends MainDatabaseService {
       .reduce((prev, current) => prev + current);
   }
 
-  public updareRentAndGet(rentIt: number) {
-    let tempItems: Array<Object> = [];
+  public updareRentAndGet() {
     return (
       this.knex("bikesToRents AS br")
         .select(
@@ -42,13 +40,11 @@ export default class RentService extends MainDatabaseService {
           "b.id AS bike_id",
           "br.id AS bikesToRents_id",
           "b.price",
-          "br.created_at",
           "c.title AS category",
           this.knex.raw(this.timeDiffQuery)
         )
         .leftJoin("bikes AS b", "b.id", "br.bike_id")
         .leftJoin("category AS c", "c.id", "b.category_id")
-        .where("br.rent_id", rentIt)
 
         //from adn update rent
         .then((items) => {
@@ -61,19 +57,7 @@ export default class RentService extends MainDatabaseService {
               sum *= 2;
             }
           }
-
-          tempItems = items;
-          return this.knex("rent")
-            .where("id", rentIt)
-            .first()
-            .update({ sum })
-            .returning("*");
-        })
-        .then((rent) => {
-          return {
-            rent: rent[0],
-            items: tempItems,
-          };
+          return { items, sum };
         })
     );
   }

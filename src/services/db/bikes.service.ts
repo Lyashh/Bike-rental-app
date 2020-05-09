@@ -63,7 +63,7 @@ export default class CartService extends MainDatabaseService {
 
   public available() {
     return this.knex("bikes AS b")
-      .select("b.id", "b.title", "b.price", "br.rent_id", "c.title AS category")
+      .select("b.id", "b.title", "b.price", "c.title AS category")
       .leftJoin("bikesToRents AS br", "br.bike_id", "b.id")
       .leftJoin("category AS c", "c.id", "b.category_id")
       .whereNull("br.id")

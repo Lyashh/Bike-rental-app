@@ -20,21 +20,9 @@ export async function up(knex: Knex): Promise<any> {
         .onDelete("CASCADE")
         .index();
     })
-    .createTable("rent", (table) => {
-      table.increments("id").primary();
-      table.float("sum");
-    })
 
     .createTable("bikesToRents", (table) => {
       table.increments("id").primary();
-      table
-        .bigInteger("rent_id")
-        .unsigned()
-        .notNullable()
-        .references("id")
-        .inTable("rent")
-        .onDelete("CASCADE")
-        .index();
       table
         .bigInteger("bike_id")
         .unsigned()
@@ -50,7 +38,6 @@ export async function up(knex: Knex): Promise<any> {
 export async function down(knex: Knex): Promise<any> {
   return knex.schema
     .dropTable("bikesToRents")
-    .dropTable("rent")
     .dropTable("bikes")
     .dropTable("category");
 }

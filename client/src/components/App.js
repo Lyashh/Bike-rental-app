@@ -53,8 +53,6 @@ class App extends React.Component {
   deleteRent(id) {
     deleteBikeRent(id)
       .then((res) => {
-        console.log(res);
-
         if (res.status == 200) {
           this.updateData();
         } else {
@@ -71,10 +69,14 @@ class App extends React.Component {
           <Col md={12}>
             <h1>Awesome Bike Rental</h1>
           </Col>
+
           <Col md={12}>
             <h3>Create new rent</h3>
-            <CreateRent items={this.state.available} />
+            {this.state.available.length > 0 ? (
+              <CreateRent items={this.state.available} />
+            ) : null}
           </Col>
+
           <Col md={12} className="m-t-70">
             {this.state.rent.id ? (
               <div>

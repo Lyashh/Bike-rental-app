@@ -1,5 +1,6 @@
 import React from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
+import { rentBike } from "../func/requests";
 
 class CreateRent extends React.Component {
   constructor(props) {
@@ -13,6 +14,30 @@ class CreateRent extends React.Component {
 
   handleCategory(e) {
     this.setCategory(e.target.value);
+  }
+
+  componentDidUpdate(prevProps) {
+    const newCat = [...new Set(this.props.items.map((el) => el.category))];
+    const checkCat = newCat.some((catg) => {
+      return this.state.category == catg;
+    });
+    if (!checkCat || prevProps.items.length != this.props.items.length) {
+      this.setCategory(newCat[0]);
+    }
+  }
+
+  rentBikeAndUpdate() {
+    rentBike(this.state.currentBike.id)
+      .then(async (res) => {
+        if (res.status == 200) {
+          this.props.updateAll();
+        } else {
+          console.error(res);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 
   setCategory(newCatg) {
@@ -29,6 +54,8 @@ class CreateRent extends React.Component {
     const categoryItems = this.props.items.filter((el) => {
       return this.state.category == el.category;
     });
+    console.log({ categoryItems });
+
     this.setState({ categoryItems }, () => {
       this.setState({ currentBike: this.state.categoryItems[0] });
     });
@@ -78,9 +105,7 @@ class CreateRent extends React.Component {
               {[...new Set(this.props.items.map((el) => el.category))].map(
                 (el, i) => {
                   if (i == 1 && !this.state.category) {
-                    this.setState({ category: el }, () => {
-                      this.setCatgItems();
-                    });
+                    this.setCategory(el);
                   }
                   return (
                     <option key={i} value={el}>
@@ -106,7 +131,12 @@ class CreateRent extends React.Component {
             </Col>
             <Col md={6}>
               <div className="rent-label"></div>
-              <Button className="rent-button">Submit Rent</Button>
+              <Button
+                className="rent-button"
+                onClick={this.rentBikeAndUpdate.bind(this)}
+              >
+                Submit Rent
+              </Button>
             </Col>
           </Row>
         </Col>

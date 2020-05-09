@@ -10,7 +10,7 @@ export default class RentController {
   public create() {
     return (req: Request, res: Response) => {
       return this.rentService
-        .insertOne(req.body.id, 1) //user rent id=1
+        .insertOne(req.body.id) //user rent id=1
         .then((data) => {
           return res.json(data);
         })
@@ -21,7 +21,7 @@ export default class RentController {
   public delete() {
     return (req: Request, res: Response) => {
       return this.rentService
-        .deleteOne(req.body.id, 1) //user rent id=1
+        .deleteOne(req.body.id) //user rent id=1
         .then((data) => {
           return res.json(data);
         })
@@ -32,7 +32,7 @@ export default class RentController {
   public getUserRent() {
     return (req: Request, res: Response) => {
       this.rentService
-        .updareRentAndGet(1) //user rent id=1
+        .updareRentAndGet() //user rent id=1
         .then((rent) => {
           return res.json(rent);
         })

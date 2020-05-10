@@ -54,7 +54,7 @@ export default class RentMiddleware {
   public deleteRent() {
     return (req: Request, res: Response, next: NextFunction) => {
       if (req.body.id && typeof req.body.id == "number") {
-        return this.rentService.bToRntsItemExists(req.body.id).then((data) => {
+        return this.rentService.bToRntsItemExists(req.body.id).then((   data) => {
           if (data) {
             return next();
           } else {

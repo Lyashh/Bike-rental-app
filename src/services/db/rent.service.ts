@@ -1,4 +1,5 @@
 import MainDatabaseService from "./main.service";
+import { Bike } from "./bikes.service"
 
 export default class RentService extends MainDatabaseService {
   private timeDiffQuery: string;
@@ -7,7 +8,7 @@ export default class RentService extends MainDatabaseService {
     this.timeDiffQuery =
       "extract(EPOCH  from (now() - created_at::timestamp))/3600 as diff"; //for bikesToRents table
   }
-  public insertOne(bikeId: number) {
+  public insertOne(bikeId: number): Promise<{sum: number, items: Array<Bike>}> {
     //create new Item in bikesToRents
     return this.knex("bikesToRents")
       .insert({ bike_id: bikeId })
@@ -17,7 +18,7 @@ export default class RentService extends MainDatabaseService {
   }
 
   // bToRntsId = bikesToRents.id
-  public deleteOne(bToRntsId: number) {
+  public deleteOne(bToRntsId: number): Promise<{sum: number, items: Array<Bike>}> {
     return this.knex("bikesToRents")
       .where("id", bToRntsId)
       .del()
@@ -32,7 +33,7 @@ export default class RentService extends MainDatabaseService {
       .reduce((prev, current) => prev + current);
   }
 
-  public updareRentAndGet() {
+  public updareRentAndGet(): Promise<{sum: number, items: Array<Bike>}> {
     return (
       this.knex("bikesToRents AS br")
         .select(

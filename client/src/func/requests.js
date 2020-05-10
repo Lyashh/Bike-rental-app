@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getAwailableBikes = () => {
+export const getAvailableBikes = () => {
   return axios.get("/api/bikes/available");
 };
 

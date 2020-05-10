@@ -26,7 +26,7 @@ export default class BikeRouter {
 
     this.router.patch(
       "/",
-      this.bikeMiddleware.updateSetNotAwailable(),
+      this.bikeMiddleware.updateSetNotAvailable(),
       this.bikeController.setNotAvailable()
     );
 

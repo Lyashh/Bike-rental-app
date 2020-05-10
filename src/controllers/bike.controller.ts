@@ -45,7 +45,7 @@ export default class BikeControoller {
         .then((data) => {
           if (data === 1) {
             return res.json({
-              message: "success set to not awailable list",
+              message: "success set to not available list",
               success: true,
             });
           } else {

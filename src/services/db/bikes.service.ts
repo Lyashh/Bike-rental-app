@@ -7,6 +7,7 @@ export interface Bike {
   category_id: number;
   category?: string;
   available?: boolean;
+  bikesToRents_id?: number;
 }
 
 export default class CartService extends MainDatabaseService {
@@ -14,7 +15,7 @@ export default class CartService extends MainDatabaseService {
     return this.knex("bikes").select("*").orderBy("id");
   }
 
-  public insert(newBike: Bike) {
+  public insert(newBike: Bike): Promise<Bike> {
     let createdBike: Bike;
     return this.knex("bikes")
       .insert(newBike)
@@ -33,15 +34,15 @@ export default class CartService extends MainDatabaseService {
       .catch((e) => e);
   }
 
-  public updateToNotAvailable(id: number) {
+  public updateToNotAvailable(id: number): Promise<number> {
     return this.knex("bikes").where("id", id).update({ available: false });
   }
 
-  public whereAvailable(available: boolean) {
+  public whereAvailable(available: boolean): Promise<Array<Bike>> {
     return this.knex("bikes").select("*").where("inRent", !available);
   }
 
-  public InRent() {
+  public InRent(): Promise<Array<Bike>> {
     return this.knex("bikesToRents AS br")
       .select(
         "b.id",
@@ -69,14 +70,14 @@ export default class CartService extends MainDatabaseService {
       .catch((err) => err);
   }
 
-  public findById(id: number) {
+  public findById(id: number): Promise<Array<Bike>> {
     return this.knex("bikes AS b")
       .select("b.id", "b.title", "br.id as bikesToRents_id", "b.available")
       .leftJoin("bikesToRents AS br", "br.bike_id", "b.id")
       .where("b.id", id);
   }
 
-  public available() {
+  public available(): Promise<Array<Bike>> {
     return this.knex("bikes AS b")
       .select("b.id", "b.title", "b.price", "c.title AS category")
       .leftJoin("bikesToRents AS br", "br.bike_id", "b.id")
@@ -86,7 +87,7 @@ export default class CartService extends MainDatabaseService {
       .orderBy("id");
   }
 
-  public bikesCatgs() {
+  public bikesCatgs(): Promise<Array<{ id: number; title: string }>> {
     return this.knex("category").select("*");
   }
 }

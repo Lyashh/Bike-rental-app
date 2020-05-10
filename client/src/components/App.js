@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  getAwailableBikes,
+  getAvailableBikes,
   getRentBikes,
   deleteBikeRent,
   getCatgs,
@@ -36,7 +36,7 @@ class App extends React.Component {
   }
 
   updateData() {
-    this.getAwailable();
+    this.getAvailable();
     this.getRent();
   }
 
@@ -49,8 +49,8 @@ class App extends React.Component {
     this.setState({ available: updateAvailable });
   }
 
-  getAwailable() {
-    getAwailableBikes()
+  getAvailable() {
+    getAvailableBikes()
       .then((res) => {
         this.setState({ available: res.data });
       })
@@ -87,12 +87,15 @@ class App extends React.Component {
         <Row>
           <h1 className="m-t-70">Awesome Bike Rental</h1>
           <Col md={12}></Col>
-          <div className="m-t-60">
-            <span role="img" aria-label="emoji1" className="emoji">
-              🏍
-            </span>
-            <h3 className="block-title ">Create new rent </h3>{" "}
-          </div>
+
+          {this.state.available.length > 0 ? (
+            <div className="title-container">
+              <span role="img" aria-label="emoji1" className="emoji">
+                🏍
+              </span>
+              <h3 className="block-title ">Create new rent </h3>{" "}
+            </div>
+          ) : null}
 
           {this.state.available.length > 0 ? (
             <Col md={12}>
@@ -103,7 +106,7 @@ class App extends React.Component {
             </Col>
           ) : null}
 
-          <div className="m-t-60">
+          <div className="title-container">
             <span role="img" aria-label="emoji1" className="emoji">
               ⚒
             </span>
@@ -119,7 +122,7 @@ class App extends React.Component {
             </Col>
           ) : null}
 
-          <div className="m-t-70">
+          <div className="title-container">
             <span role="img" aria-label="emoji1" className="emoji">
               🔑
             </span>
@@ -135,9 +138,13 @@ class App extends React.Component {
                   delFunc={this.deleteRent.bind(this)}
                 />
               </div>
-            ) : null}
+            ) : (
+              <Col md={12} className="empty-list">
+                <p>Rent dont have items</p>
+              </Col>
+            )}
           </Col>
-          <div className="m-t-70">
+          <div className="title-container">
             <span role="img" aria-label="emoji1" className="emoji">
               🚲
             </span>
@@ -153,7 +160,11 @@ class App extends React.Component {
                 updateAll={this.updateData.bind(this)}
                 updateAftDelete={this.deleteAvailableItem.bind(this)}
               />
-            ) : null}
+            ) : (
+              <Col md={12} className="empty-list">
+                <p>No bikes available</p>
+              </Col>
+            )}
           </Col>
         </Row>
       </Container>

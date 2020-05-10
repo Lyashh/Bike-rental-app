@@ -31,7 +31,7 @@ export default class RoleMiddleware {
     };
   }
 
-  public updateSetNotAwailable() {
+  public updateSetNotAvailable() {
     return (req: Request, res: Response, next: NextFunction) => {
       if (req.body.id && typeof req.body.id == "number") {
         return this.bikesService

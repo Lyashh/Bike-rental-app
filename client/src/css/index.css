@@ -12,6 +12,10 @@ body {
   margin-top: 8px;
 }
 
+.w-100 {
+  width: 100%;
+}
+
 .m-t-70 {
   margin-top: 70px;
 }
@@ -44,14 +48,20 @@ body {
   border-color: #1fba99 !important;
 }
 
-.list-item {
+.list-item,
+.empty-list {
   min-height: 86px;
   background-color: #fff;
   border: 1px solid #c4c2c2;
   margin-bottom: 35px;
 }
 
-.aw-forward-info {
+.empty-list {
+  text-align: center;
+}
+
+.aw-forward-info,
+.empty-list {
   padding: 20px;
   font-size: 18px;
 }
@@ -74,17 +84,26 @@ body {
   text-align: right;
 }
 
-@media only screen and (max-width: 767px) {
-  .item-button-group {
-    text-align: left;
-    margin-top: 30px;
-  }
-}
-
 .err-field {
   color: #af1923;
 }
 
 .success-field {
   color: #14947f;
+}
+
+.title-container {
+  width: 100%;
+  margin-top: 60px;
+}
+
+@media only screen and (max-width: 767px) {
+  .item-button-group {
+    text-align: left;
+    margin-top: 30px;
+  }
+
+  .title-container {
+    text-align: center;
+  }
 }

@@ -11,15 +11,15 @@ export interface Bike {
 
 export default class CartService extends MainDatabaseService {
   public selectAll(): Promise<Array<Bike>> {
-    return this.knex("bikes").select("*");
+    return this.knex("bikes").select("*").orderBy("id");
   }
 
   public insert(newBike: Bike) {
     return this.knex("bikes").insert(newBike).returning("*");
   }
 
-  public deleteById(id: number) {
-    return this.knex("bikes").where("id", id).del();
+  public updateToNotAvailable(id: number) {
+    return this.knex("bikes").where("id", id).update({ available: false });
   }
 
   public whereAvailable(available: boolean) {
@@ -55,10 +55,10 @@ export default class CartService extends MainDatabaseService {
   }
 
   public findById(id: number) {
-    return this.knex("bikes")
-      .select("bikes.id", "bikes.title", "bikesToRents.id as bikesToRents_id")
-      .leftJoin("bikesToRents", "bikesToRents.bike_id", "bikes.id")
-      .where("bikes.id", id);
+    return this.knex("bikes AS b")
+      .select("b.id", "b.title", "br.id as bikesToRents_id", "b.available")
+      .leftJoin("bikesToRents AS br", "br.bike_id", "b.id")
+      .where("b.id", id);
   }
 
   public available() {
@@ -67,6 +67,7 @@ export default class CartService extends MainDatabaseService {
       .leftJoin("bikesToRents AS br", "br.bike_id", "b.id")
       .leftJoin("category AS c", "c.id", "b.category_id")
       .whereNull("br.id")
+      .andWhere("b.available", true)
       .orderBy("id");
   }
 }

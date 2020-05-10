@@ -11,6 +11,7 @@ export async function up(knex: Knex): Promise<any> {
       table.increments("id").primary();
       table.string("title").notNullable();
       table.float("price").notNullable();
+      table.boolean("available ").defaultTo(true).notNullable();
       table
         .bigInteger("category_id")
         .unsigned()

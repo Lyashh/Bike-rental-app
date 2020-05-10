@@ -40,15 +40,18 @@ export default class BikeControoller {
     };
   }
 
-  public delete() {
+  public setNotAvailable() {
     return (req: Request, res: Response): Promise<Response> => {
       return this.bikeService
-        .deleteById(req.body.id)
+        .updateToNotAvailable(req.body.id)
         .then((data) => {
           if (data === 1) {
-            return res.json({ message: "success delete", success: true });
+            return res.json({
+              message: "success set to not awailable list",
+              success: true,
+            });
           } else {
-            return res.status(500).json({ err: data });
+            return res.status(500).json({ err: data, success: false });
           }
         })
         .catch((err) => res.status(500).json({ err }));
@@ -59,17 +62,6 @@ export default class BikeControoller {
     return (req: Request, res: Response): Promise<Response> => {
       return this.bikeService
         .available()
-        .then((data) => {
-          return res.json(data);
-        })
-        .catch((err) => res.status(500).json({ err }));
-    };
-  }
-
-  public byInRent() {
-    return (req: Request, res: Response): Promise<Response> => {
-      return this.bikeService
-        .InRent()
         .then((data) => {
           return res.json(data);
         })

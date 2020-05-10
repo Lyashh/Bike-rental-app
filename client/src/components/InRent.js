@@ -16,7 +16,7 @@ class InRent extends React.Component {
                 <Col md={6} className="m-t-8">
                   {bike.title} / {bike.category} / ${bike.price}
                 </Col>
-                <Col md={6} style={{ textAlign: "right" }}>
+                <Col md={6} className="item-button-group">
                   <Button
                     variant="danger"
                     className="delete-btn aw-btn"

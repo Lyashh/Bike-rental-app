@@ -8,7 +8,7 @@
   },
   "knexfile": "--cwd src/database",
   "scripts": {
-    "ts:watch": "npx typescript -w",
+    "ts:watch": "./node_modules/typescript/bin/tsc -w",
     "server:start": "node dist/app.js",
     "server:watch": "./node_modules/.bin/nodemon -r ./dist/app.js",
     "migrate:latest": "export $(cat .env | xargs) && npm run ts-node -- $npm_package_modulesUrls_knex migrate:latest $npm_package_knexfile",
@@ -16,7 +16,7 @@
     "migrate:down": "export $(cat .env | xargs) && npm run ts-node -- $npm_package_modulesUrls_knex migrate:down $npm_package_knexfile",
     "migrate:up": "export $(cat .env | xargs) && npm run ts-node -- $npm_package_modulesUrls_knex migrate:up $npm_package_knexfile",
     "seed:run": "export $(cat .env | xargs) && npm run ts-node -- $npm_package_modulesUrls_knex seed:run $npm_package_knexfile",
-    "ts-node": "npx ts-node"
+    "ts-node": "./node_modules/ts-node/dist/bin.js"
   },
   "author": "",
   "license": "ISC",
@@ -37,6 +37,7 @@
     "knex": "^0.21.1",
     "pg": "^8.0.3",
     "react-bootstrap": "^1.0.1",
+    "ts-node": "^8.10.1",
     "typescript": "^3.8.3"
   }
 }

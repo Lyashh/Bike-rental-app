@@ -80,3 +80,11 @@ body {
     margin-top: 30px;
   }
 }
+
+.err-field {
+  color: #af1923;
+}
+
+.success-field {
+  color: #14947f;
+}

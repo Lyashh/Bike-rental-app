@@ -21,6 +21,7 @@ class App extends React.Component {
       categories: [],
     };
   }
+
   componentDidMount() {
     getCatgs()
       .then((res) => {
@@ -29,14 +30,18 @@ class App extends React.Component {
         } else {
           console.log(res);
         }
+        this.updateData();
       })
       .catch((e) => console.log({ error: e }));
-    this.updateData();
   }
 
   updateData() {
     this.getAwailable();
     this.getRent();
+  }
+
+  insertNewAvailableItem(newItem) {
+    this.setState({ available: [...this.state.available, newItem] });
   }
 
   getAwailable() {
@@ -84,23 +89,30 @@ class App extends React.Component {
             <h3 className="block-title ">Create new rent </h3>{" "}
           </div>
 
-          <Col md={12}>
-            {this.state.available.length > 0 ? (
+          {this.state.available.length > 0 ? (
+            <Col md={12}>
               <CreateRent
                 items={this.state.available}
                 updateAll={this.updateData.bind(this)}
               />
-            ) : null}
-          </Col>
+            </Col>
+          ) : null}
+
           <div className="m-t-60">
             <span role="img" aria-label="emoji1" className="emoji">
               ⚒
             </span>
             <h3 className="block-title ">Add new Bike</h3>{" "}
           </div>
-          <Col md={12}>
-            {this.state.categories.length > 0 ? <CreateBike /> : null}
-          </Col>
+
+          {this.state.categories.length > 0 ? (
+            <Col md={12}>
+              <CreateBike
+                categories={this.state.categories}
+                update={this.insertNewAvailableItem.bind(this)}
+              />{" "}
+            </Col>
+          ) : null}
 
           <div className="m-t-70">
             <span role="img" aria-label="emoji1" className="emoji">

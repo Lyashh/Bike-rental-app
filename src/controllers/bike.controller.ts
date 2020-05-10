@@ -26,13 +26,11 @@ export default class BikeControoller {
         title: req.body.title,
         category_id: req.body.category_id,
         price: req.body.price,
-        inRent: false,
-        rent_id: null,
       };
       return this.bikeService
         .insert(newBike)
         .then((newBike) => {
-          return res.json(newBike[0]);
+          return res.json(newBike);
         })
         .catch((err) => {
           return res.status(500).json({ err });

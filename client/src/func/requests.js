@@ -19,3 +19,7 @@ export const rentBike = (id) => {
 export const getCatgs = () => {
   return axios.get("/api/bikes/categories");
 };
+
+export const createBike = (newItem) => {
+  return axios.post("/api/bikes", newItem);
+};

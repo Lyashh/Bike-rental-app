@@ -76,6 +76,7 @@ class CreateRent extends React.Component {
             <Form.Label className="rent-label">Bike name</Form.Label>
             <Form.Control
               as="select"
+              value={this.state.currentBike.id}
               defaultValue={this.state.currentBike.id}
               onChange={this.handleCurrentBike.bind(this)}
             >

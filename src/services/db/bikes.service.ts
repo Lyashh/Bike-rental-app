@@ -4,9 +4,9 @@ export interface Bike {
   id?: number;
   title: string;
   price: number;
-  inRent: boolean;
   category_id: number;
-  rent_id: number | null;
+  category?: string;
+  available?: boolean;
 }
 
 export default class CartService extends MainDatabaseService {
@@ -15,7 +15,22 @@ export default class CartService extends MainDatabaseService {
   }
 
   public insert(newBike: Bike) {
-    return this.knex("bikes").insert(newBike).returning("*");
+    let createdBike: Bike;
+    return this.knex("bikes")
+      .insert(newBike)
+      .returning("*")
+      .then((newBike) => {
+        createdBike = newBike[0];
+        return this.knex("category").where(
+          "id",
+          Number.parseInt(newBike[0].category_id)
+        );
+      })
+      .then((category) => {
+        createdBike.category = category[0].title;
+        return createdBike;
+      })
+      .catch((e) => e);
   }
 
   public updateToNotAvailable(id: number) {

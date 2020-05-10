@@ -10,7 +10,7 @@
   "scripts": {
     "ts:watch": "./node_modules/typescript/bin/tsc -w",
     "server:start": "node dist/app.js",
-    "server:watch": "./node_modules/.bin/nodemon -r ./dist/app.js",
+    "server:watch": "./node_modules/.bin/nodemon --delay 2500ms --watch ./dist/app.js",
     "migrate:latest": "export $(cat .env | xargs) && npm run ts-node -- $npm_package_modulesUrls_knex migrate:latest $npm_package_knexfile",
     "migrate:rollback": "export $(cat .env | xargs) && npm run ts-node -- $npm_package_modulesUrls_knex migrate:rollback $npm_package_knexfile",
     "migrate:down": "export $(cat .env | xargs) && npm run ts-node -- $npm_package_modulesUrls_knex migrate:down $npm_package_knexfile",

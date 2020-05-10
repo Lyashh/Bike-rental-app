@@ -23,15 +23,13 @@ export default class BikeRouter {
       this.bikeController.create()
     );
 
-    this.router.delete(
+    this.router.patch(
       "/",
-      this.bikeMiddleware.validateBikeIdExist(),
-      this.bikeController.delete()
+      this.bikeMiddleware.updateSetNotAwailable(),
+      this.bikeController.setNotAvailable()
     );
 
     this.router.get("/available", this.bikeController.byAvailable());
-    this.router.get("/inRent", this.bikeController.byInRent());
-
     return this.router;
   }
 }

@@ -31,13 +31,27 @@ export default class RoleMiddleware {
     };
   }
 
-  public validateBikeIdExist() {
+  public updateSetNotAwailable() {
     return (req: Request, res: Response, next: NextFunction) => {
       if (req.body.id && typeof req.body.id == "number") {
         return this.bikesService
           .findById(req.body.id)
           .then((data) => {
+            console.log({ data });
+
             if (data.length > 0) {
+              if (!data[0].available) {
+                return res.status(422).json({
+                  message: "validation error",
+                  detail: `bike with id=${req.body.id} already is not available`,
+                });
+              }
+              if (data[0].bikesToRents_id) {
+                return res.status(422).json({
+                  message: "validation error",
+                  detail: `bike with id=${req.body.id} now in rent. You cant change bikes available field.`,
+                });
+              }
               return next();
             } else {
               return res.status(404).json({

@@ -25,6 +25,12 @@ export default class RentMiddleware {
                   detail: `bike with id=${req.body.id} already in rent`,
                 });
               }
+              if (!data[0].available) {
+                return res.status(422).json({
+                  message: "validation error",
+                  detail: `bike with id=${req.body.id} is not available`,
+                });
+              }
               return next();
             } else {
               return res.status(404).json({

@@ -3,7 +3,6 @@ import {
   getAwailableBikes,
   getRentBikes,
   deleteBikeRent,
-  rentBike,
 } from "../func/requests";
 import { Row, Container, Col } from "react-bootstrap";
 import CreateRent from "./CreateRent";
@@ -15,10 +14,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       available: [],
-      rent: {
-        id: null,
-        sum: 0,
-      },
+      sum: 0,
       rentItems: [],
     };
   }
@@ -43,7 +39,7 @@ class App extends React.Component {
     getRentBikes()
       .then((res) => {
         if (res.status == 200) {
-          this.setState({ rent: res.data.rent, rentItems: res.data.items });
+          this.setState({ sum: res.data.sum, rentItems: res.data.items });
         } else {
           console.log(res.data);
         }
@@ -67,12 +63,16 @@ class App extends React.Component {
     return (
       <Container>
         <Row>
-          <Col md={12}>
-            <h1>Awesome Bike Rental</h1>
-          </Col>
+          <h1 className="m-t-70">Awesome Bike Rental</h1>
+          <Col md={12}></Col>
+          <div className="m-t-60">
+            <span role="img" aria-label="emoji1" className="emoji">
+              🤑
+            </span>
+            <h3 className="block-title ">Create new rent </h3>{" "}
+          </div>
 
           <Col md={12}>
-            <h3>Create new rent</h3>
             {this.state.available.length > 0 ? (
               <CreateRent
                 items={this.state.available}
@@ -80,11 +80,17 @@ class App extends React.Component {
               />
             ) : null}
           </Col>
-
-          <Col md={12} className="m-t-70">
-            {this.state.rent.id ? (
+          <div className="m-t-70">
+            <span role="img" aria-label="emoji1" className="emoji">
+              🤩
+            </span>
+            <h3 className="block-title">
+              Rent Bikes (Total: ${this.state.sum} )
+            </h3>
+          </div>
+          <Col md={12}>
+            {this.state.rentItems.length > 0 ? (
               <div>
-                <h3>Rent Bikes ( ${this.state.rent.sum} )</h3>
                 <InRent
                   items={this.state.rentItems}
                   delFunc={this.deleteRent.bind(this)}
@@ -92,16 +98,21 @@ class App extends React.Component {
               </div>
             ) : null}
           </Col>
-          {/* <Col md={12} className="m-t-70">
-            {this.state.rent.items > 0 ? (
-              
-            ) : null}
-          </Col> */}
+          <div className="m-t-70">
+            <span role="img" aria-label="emoji1" className="emoji">
+              🚲
+            </span>
+            <h3 className="block-title">
+              Available bicycles ({this.state.available.length})
+            </h3>
+          </div>
 
-          <Col md={12} className="m-t-70">
-            <h3>Available bicycles ({this.state.available.length})</h3>
+          <Col md={12}>
             {this.state.available.length > 0 ? (
-              <Available items={this.state.available} />
+              <Available
+                items={this.state.available}
+                updateAll={this.updateData.bind(this)}
+              />
             ) : null}
           </Col>
         </Row>

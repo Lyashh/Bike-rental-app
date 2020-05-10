@@ -23,3 +23,7 @@ export const getCatgs = () => {
 export const createBike = (newItem) => {
   return axios.post("/api/bikes", newItem);
 };
+
+export const setNotAvailable = (id) => {
+  return axios.patch("/api/bikes", { id });
+};

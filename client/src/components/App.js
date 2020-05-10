@@ -44,6 +44,11 @@ class App extends React.Component {
     this.setState({ available: [...this.state.available, newItem] });
   }
 
+  deleteAvailableItem(id) {
+    const updateAvailable = this.state.available.filter((el) => el.id != id);
+    this.setState({ available: updateAvailable });
+  }
+
   getAwailable() {
     getAwailableBikes()
       .then((res) => {
@@ -146,6 +151,7 @@ class App extends React.Component {
               <Available
                 items={this.state.available}
                 updateAll={this.updateData.bind(this)}
+                updateAftDelete={this.deleteAvailableItem.bind(this)}
               />
             ) : null}
           </Col>

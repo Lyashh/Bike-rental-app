@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
-import { rentBike } from "../func/requests";
+import { rentBike, setNotAvailable } from "../func/requests";
 
 class Available extends React.Component {
   rentBikeAndUpdate(id) {
@@ -13,9 +13,24 @@ class Available extends React.Component {
         }
       })
       .catch((e) => {
-        console.log(e);
+        console.error(e);
       });
   }
+
+  deleteBike(id) {
+    setNotAvailable(Number.parseInt(id))
+      .then(async (res) => {
+        if (res.status == 200) {
+          this.props.updateAftDelete(id);
+        } else {
+          console.error(res);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }
+
   render() {
     return (
       <Row>
@@ -30,12 +45,15 @@ class Available extends React.Component {
                   <Button
                     variant="primary"
                     className="rent-btn aw-btn"
-                    data-id={bike.id}
                     onClick={() => this.rentBikeAndUpdate(bike.id)}
                   >
                     Rent
                   </Button>{" "}
-                  <Button variant="danger" className="delete-btn aw-btn">
+                  <Button
+                    variant="danger"
+                    className="delete-btn aw-btn"
+                    onClick={() => this.deleteBike(bike.id)}
+                  >
                     Delete
                   </Button>{" "}
                 </Col>

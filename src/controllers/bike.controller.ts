@@ -68,4 +68,15 @@ export default class BikeControoller {
         .catch((err) => res.status(500).json({ err }));
     };
   }
+
+  public getCatgs() {
+    return (req: Request, res: Response): Promise<Response> => {
+      return this.bikeService
+        .bikesCatgs()
+        .then((data) => {
+          return res.json(data);
+        })
+        .catch((err) => res.status(500).json({ err }));
+    };
+  }
 }

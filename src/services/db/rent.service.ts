@@ -51,11 +51,14 @@ export default class RentService extends MainDatabaseService {
           //calculate total sum and check double_price
           let sum = 0;
           if (items.length > 0) {
+            items = items.map((bike) => {
+              bike.diff = Math.ceil(bike.diff);
+              if (bike.diff > 20) {
+                bike.price *= 2;
+              }
+              return bike;
+            });
             sum = this.calculateSum(items);
-            const double_price = items.some((el) => el.diff > 20);
-            if (double_price) {
-              sum *= 2;
-            }
           }
           return { items, sum };
         })

@@ -15,6 +15,7 @@ export default class BikeRouter {
 
   public get routes(): ExpressRouter {
     this.router.get("/", this.bikeController.getAll());
+    this.router.get("/categories", this.bikeController.getCatgs());
 
     this.router.post(
       "/",

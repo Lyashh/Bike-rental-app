@@ -70,4 +70,8 @@ export default class CartService extends MainDatabaseService {
       .andWhere("b.available", true)
       .orderBy("id");
   }
+
+  public bikesCatgs() {
+    return this.knex("category").select("*");
+  }
 }

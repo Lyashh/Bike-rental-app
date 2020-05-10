@@ -15,3 +15,7 @@ export const deleteBikeRent = (id) => {
 export const rentBike = (id) => {
   return axios.post("/api/rent", { id: Number.parseInt(id) });
 };
+
+export const getCatgs = () => {
+  return axios.get("/api/bikes/categories");
+};

@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import doenv from "dotenv";
+import path from "path";
 
 import DB from "./database/connection";
 import Router from "./routes/index.router";
@@ -42,6 +43,17 @@ class App {
 
     this.expressApp.set("port", process.env.PORT || 4000);
     this.expressApp.use("/api/", this.router.routes);
+
+    this.expressApp.use(
+      "/",
+      express.static(path.join(__dirname, "../", "client", "build"))
+    );
+
+    this.expressApp.get("/", (req, res) => {
+      return res.sendFile(
+        path.resolve(__dirname, "../", "client", "build", "index.html")
+      );
+    });
 
     // 404
     this.expressApp.use((req, res, next) => {

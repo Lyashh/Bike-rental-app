@@ -37,8 +37,6 @@ export default class RoleMiddleware {
         return this.bikesService
           .findById(req.body.id)
           .then((data) => {
-            console.log({ data });
-
             if (data.length > 0) {
               if (!data[0].available) {
                 return res.status(422).json({

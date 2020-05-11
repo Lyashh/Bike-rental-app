@@ -54,7 +54,6 @@ class CreateRent extends React.Component {
     const categoryItems = this.props.items.filter((el) => {
       return this.state.category == el.category;
     });
-    console.log({ categoryItems });
 
     this.setState({ categoryItems }, () => {
       this.setState({ currentBike: this.state.categoryItems[0] });

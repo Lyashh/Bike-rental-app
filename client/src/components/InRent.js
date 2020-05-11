@@ -9,9 +9,9 @@ class InRent extends React.Component {
   render() {
     return (
       <Row>
-        {this.props.items.map((bike) => {
+        {this.props.items.map((bike, i) => {
           return (
-            <Col md={12} className="list-item">
+            <Col md={12} className="list-item" key={i}>
               <Row className="justify-content-between aw-forward-info">
                 <Col md={6} className="m-t-8">
                   {bike.title} / {bike.category} / ${bike.price} / Time in Rent:{" "}

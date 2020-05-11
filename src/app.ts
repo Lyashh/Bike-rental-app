@@ -18,19 +18,40 @@ class App {
   private constructor() {
     this.expressApp = express();
     this.router = new Router();
-    this.config();
 
     // check connection to db
-    knex
-      .raw('SET timezone="UTC";')
-      .then(() => console.log("Success connection to Database"))
-      .catch((err) => {
-        console.error({
-          message: "Database failed to connect",
-          error: err,
-        });
-        throw new Error("Database failed to connect");
-      });
+    let connectTry = async (retries) => {
+      await new Promise((resp) => setTimeout(resp, 5000));
+      while (retries) {
+        let test = await knex
+          .raw('SET timezone="UTC";')
+          .then(() => {
+            console.log("SUCCESS CONNECTION DO DATABASE");
+            return true;
+          })
+          .catch((err) => {
+            console.error({
+              retry: retries,
+              db_user: process.env.POSTGRES_USER,
+              message: "Database failed to connect",
+              error: err,
+            });
+            return false;
+          });
+        if (test) {
+          break;
+          console.log("Success connection to confirm");
+        } else {
+          if (retries == 1) {
+            throw new Error("Database failed to connect");
+          }
+          retries -= 1;
+          await new Promise((resp) => setTimeout(resp, 5000));
+        }
+      }
+    };
+    connectTry(6);
+    this.config();
   }
 
   private config(): void {

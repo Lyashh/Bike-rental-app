@@ -15,3 +15,12 @@ services:
     restart: always
     ports:
       - 8080:8080
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    command: npm run docker:command

@@ -5,7 +5,7 @@ doenv.config();
 
 const database = {
   client: "postgresql",
-  connection: `postgres://${process.env.POSTGRES_USER?.trim()}:${process.env.POSTGRES_PASSWORD?.trim()}@localhost:5432/${
+  connection: `postgres://${process.env.POSTGRES_USER?.trim()}:${process.env.POSTGRES_PASSWORD?.trim()}@${process.env.PG_HOST?.trim()}:5432/${
     process.env.POSTGRES_DB
   }`,
   migrations: {

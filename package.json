@@ -22,9 +22,8 @@
     "client:install": "npm i --prefix client",
     "client:build": "npm run build --prefix client",
     "build:migrateANDSeed": "npm run migrate:latest && npm run seed:run",
-    "build:installALL": "npm run server:install && npm run client:install",
-    "build:buildAndRun": "npm run client:build && npm run ts:build && npm run server:start",
-    "prod": "npm run build:migrateANDSeed && npm run build:installALL && npm run build:buildAndRun"
+    "all:build": "npm run client:build && npm run ts:build && exit 1;",
+    "docker:command": "npm run build:migrateANDSeed && npm run server:start"
   },
   "author": "",
   "license": "ISC",

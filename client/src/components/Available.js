@@ -36,10 +36,10 @@ class Available extends React.Component {
       <Row>
         {this.props.items.map((bike, i) => {
           return (
-            <Col md={12} className="list-item" key={i} >
+            <Col md={12} className="list-item" key={i}>
               <Row className="justify-content-between aw-forward-info">
                 <Col md={6} className="m-t-8">
-                  {bike.title} / {bike.category} / ${bike.price}
+                  {bike.title} / {bike.category} / ${bike.price}/h
                 </Col>
                 <Col md={6} className="item-button-group">
                   <Button

@@ -1,5 +1,5 @@
 import MainDatabaseService from "./main.service";
-import { Bike } from "./bikes.service"
+import { Bike } from "./bikes.service";
 
 export default class RentService extends MainDatabaseService {
   private timeDiffQuery: string;
@@ -8,7 +8,9 @@ export default class RentService extends MainDatabaseService {
     this.timeDiffQuery =
       "extract(EPOCH  from (now() - created_at::timestamp))/3600 as diff"; //for bikesToRents table
   }
-  public insertOne(bikeId: number): Promise<{sum: number, items: Array<Bike>}> {
+  public insertOne(
+    bikeId: number
+  ): Promise<{ sum: number; items: Array<Bike> }> {
     //create new Item in bikesToRents
     return this.knex("bikesToRents")
       .insert({ bike_id: bikeId })
@@ -18,7 +20,9 @@ export default class RentService extends MainDatabaseService {
   }
 
   // bToRntsId = bikesToRents.id
-  public deleteOne(bToRntsId: number): Promise<{sum: number, items: Array<Bike>}> {
+  public deleteOne(
+    bToRntsId: number
+  ): Promise<{ sum: number; items: Array<Bike> }> {
     return this.knex("bikesToRents")
       .where("id", bToRntsId)
       .del()
@@ -33,7 +37,7 @@ export default class RentService extends MainDatabaseService {
       .reduce((prev, current) => prev + current);
   }
 
-  public updareRentAndGet(): Promise<{sum: number, items: Array<Bike>}> {
+  public updareRentAndGet(): Promise<{ sum: number; items: Array<Bike> }> {
     return (
       this.knex("bikesToRents AS br")
         .select(
@@ -54,12 +58,14 @@ export default class RentService extends MainDatabaseService {
           if (items.length > 0) {
             items = items.map((bike) => {
               bike.diff = Math.ceil(bike.diff);
+              bike.price *= bike.diff; //price per n hours
               if (bike.diff > 20) {
-                bike.price *= 2;
+                bike.price /= 2; // if more than 20 hours decrease half of price
               }
+              bike.price = parseFloat(bike.price.toFixed(2));
               return bike;
             });
-            sum = this.calculateSum(items);
+            sum = parseFloat(this.calculateSum(items).toFixed(2));
           }
           return { items, sum };
         })

@@ -14,8 +14,8 @@ class InRent extends React.Component {
             <Col md={12} className="list-item" key={i}>
               <Row className="justify-content-between aw-forward-info">
                 <Col md={6} className="m-t-8">
-                  {bike.title} / {bike.category} / ${bike.price} / Time in Rent:{" "}
-                  {bike.diff}h
+                  {bike.title} / {bike.category} / Time in Rent: {bike.diff}h /
+                  ${bike.price}
                 </Col>
                 <Col md={6} className="item-button-group">
                   <Button

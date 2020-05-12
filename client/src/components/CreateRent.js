@@ -121,7 +121,9 @@ class CreateRent extends React.Component {
           <Row>
             <Col md={6}>
               <Form.Group controlId="exampleForm.ControlInput1">
-                <Form.Label className="rent-label">Rent Price</Form.Label>
+                <Form.Label className="rent-label">
+                  Rent Price per hour
+                </Form.Label>
                 <Form.Control
                   type="text"
                   defaultValue={0}

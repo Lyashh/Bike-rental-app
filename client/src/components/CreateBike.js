@@ -119,7 +119,9 @@ class CreateBike extends React.Component {
           <Row>
             <Col md={6}>
               <Form.Group controlId="qweqweweq">
-                <Form.Label className="rent-label">Bike price</Form.Label>
+                <Form.Label className="rent-label">
+                  Bike price per hour
+                </Form.Label>
                 <Form.Control
                   type="number"
                   value={this.state.price}

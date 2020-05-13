@@ -51,5 +51,5 @@ http://localhost:4000/
 
 ## 2. Documentation
 
-All API Doc you can get postman link:
+All API Doc you can get by postman link:
 https://documenter.getpostman.com/view/7503052/Szmh1c3P
